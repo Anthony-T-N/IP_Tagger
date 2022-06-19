@@ -2,23 +2,33 @@
 #include <fstream>
 #include <string>
 #include <filesystem>
+#include <regex>
 
 int scan_dir(std::vector<std::string> &dir_vector)
 {
     std::string input_file_line;
     std::ifstream input_file;
     std::string user_input;
+    std::regex rgx(R"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})");
     for (int i = 0; i <= dir_vector.size() - 1; i++)
     {   
+        std::smatch match;
         std::cout << "[+] Opening file: " << dir_vector[i] << "\n\n";
         input_file.open(dir_vector[i]);
         while (std::getline(input_file, input_file_line))
         {
+            if (std::regex_match(input_file_line, match, rgx))
+            {
+                std::cout << "NNN: " << input_file_line << "\n";
+                std::cout << "Match: " << match[0] << '\n';
+            }
+            /*
             //std::cout << input_file_line << "\n";
             if (input_file_line.find("1") != std::string::npos)
             {
                 std::cout << input_file_line << " END " << "\n\n";
             }
+            */
         }
         input_file.close();
     }
