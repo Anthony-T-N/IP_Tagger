@@ -9,10 +9,11 @@ int scan_dir(std::vector<std::string> &dir_vector)
     std::string input_file_line;
     std::ifstream input_file;
     std::string user_input;
-    std::regex rgx(R"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})");
+    std::regex rgx(R"(\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b)");
     for (int i = 0; i <= dir_vector.size() - 1; i++)
     {   
         std::smatch match;
+        std::cout << "\n";
         std::cout << "[+] Opening file: " << dir_vector[i] << "\n\n";
         input_file.open(dir_vector[i]);
         while (std::getline(input_file, input_file_line))
@@ -49,7 +50,11 @@ int main()
     std::cout << "Show current directoy files" << "\n";
     for (const auto& entry : std::filesystem::directory_iterator(std::filesystem::current_path()))
     {
-        if (entry.path().extension() == ".txt")
+        if (entry.is_directory())
+        {
+            std::cout << entry.path() << "\n";
+        }
+        else
         {
             std::cout << entry.path() << "\n";
             dir_vector.push_back(entry.path().string());
@@ -57,6 +62,7 @@ int main()
     }
     while (true)
     {
+        /*
         std::cout << "[>] Select directory to check:" << "\n";
         std::getline(std::cin, user_input);
         std::cout << "\n";
@@ -72,7 +78,9 @@ int main()
                 std::cout << entry.path() << "\n";
             }
         }
+        */
         scan_dir(dir_vector);
+        std::cout << "\n";
         std::cout << "[!] END" << "\n";
         std::cout << "[!] Exiting..." << "\n\n";
         std::cin.get();
