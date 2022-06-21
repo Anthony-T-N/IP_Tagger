@@ -4,6 +4,8 @@
 #include <filesystem>
 #include <regex>
 
+std::vector<std::string> extension_blacklist = { ".gif", ".jpeg", ".png", ".jpg", ".exe", ".tif", ".7z", ".py" };
+
 int scan_dir(std::vector<std::string> &dir_vector)
 {
     std::string input_file_line;
@@ -54,8 +56,16 @@ int main()
         {
             std::cout << entry.path() << "\n";
         }
-        else
+        else if (entry.path().has_extension())
         {
+            for (int i = 0; i <= extension_blacklist.size() - 1; i++)
+            {
+                if (entry.path().extension() == (extension_blacklist[i]))
+                {
+                    std::cout << "Skipping.. | Path contains: " << extension_blacklist[i] << "\n";
+                    continue;
+                }
+            }
             std::cout << entry.path() << "\n";
             dir_vector.push_back(entry.path().string());
         }
